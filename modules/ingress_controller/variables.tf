@@ -28,19 +28,17 @@ variable "deployment_namespace" {
   default = "default"
 }
 
-variable "chart_name" {
-  type    = string
-  default = "ingress-nginx"
-}
-
 variable "chart_version" {
   type    = string
   default = "4.8.1"
 }
 
-variable "chart_repository" {
-  type    = string
-  default = "https://kubernetes.github.io/ingress-nginx"
+variable "create_namespace" {
+  type = bool
+}
+
+variable "force_update" {
+  type = bool
 }
 
 variable "public_ip_address_name" {

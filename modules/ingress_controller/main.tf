@@ -19,10 +19,11 @@ provider "helm" {
 resource "helm_release" "nginx-ingress" {
   name             = var.deployment_name
   namespace        = var.deployment_namespace
-  chart            = var.chart_name
-  repository       = var.chart_repository
+  chart            = "ingress-nginx"
+  repository       = "https://kubernetes.github.io/ingress-nginx"
   version          = var.chart_version
-  create_namespace = true
+  create_namespace = var.create_namespace
+  force_update     = var.force_update
   cleanup_on_fail  = true
   timeout          = 600
 

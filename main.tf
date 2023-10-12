@@ -78,6 +78,8 @@ module "ingress" {
   # Ingress Controller Config
   deployment_name                  = "nginx-ingress"
   deployment_namespace             = "ingress-nginx"
+  force_update                     = false
+  create_namespace                 = true
   public_ip_address_name           = azurerm_public_ip.ingress_ip.name
   loadbalancer_ipv4_address        = azurerm_public_ip.ingress_ip.ip_address
   loadbalancer_dns_label_name      = var.dns_prefix
