@@ -27,6 +27,12 @@ resource "azurerm_resource_group" "k8s" {
 }
 
 resource "azurerm_kubernetes_cluster" "k8s" {
+  dns_prefix          = var.dns_prefix
+  location            = azurerm_resource_group.k8s.location
+  resource_group_name = azurerm_resource_group.k8s.name
+  name                = var.kubernetes_cluster_name
+  kubernetes_version  = var.kubernetes_version
+
   default_node_pool {
     name                = var.default_node_pool_name
     node_count          = var.node_count
@@ -41,11 +47,6 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     type = "SystemAssigned"
   }
 
-  location            = azurerm_resource_group.k8s.location
-  dns_prefix          = var.dns_prefix
-  kubernetes_version  = var.k8s_version
-  resource_group_name = azurerm_resource_group.k8s.name
-  name                = var.k8s_name
   tags = {
     Environment = var.environment
   }
@@ -96,7 +97,7 @@ module "k8s" {
   # Web App Config
   deployment_name            = "web-app"
   deployment_namespace       = "software-ag"
-  deployment_container_image = "nginx:latest"
+  deployment_container_image = "nginxdemos/hello"
   deployment_replicas        = 1
 
   deployment_container_limits = {

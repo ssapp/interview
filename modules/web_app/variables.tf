@@ -1,4 +1,4 @@
-variable "client_certificate" {
+variable "host" {
   type      = string
   sensitive = true
 }
@@ -8,14 +8,19 @@ variable "client_key" {
   sensitive = true
 }
 
+variable "client_certificate" {
+  type      = string
+  sensitive = true
+}
+
 variable "cluster_ca_certificate" {
   type      = string
   sensitive = true
 }
 
-variable "host" {
-  type      = string
-  sensitive = true
+variable "deployment_name" {
+  type    = string
+  default = "web-app"
 }
 
 variable "deployment_namespace" {
@@ -30,11 +35,6 @@ variable "deployment_labels" {
   }
 }
 
-variable "deployment_name" {
-  type    = string
-  default = "web-app"
-}
-
 variable "deployment_replicas" {
   type    = number
   default = 1
@@ -42,9 +42,8 @@ variable "deployment_replicas" {
 
 variable "deployment_container_image" {
   type    = string
-  default = "nginx"
+  default = "nginxdemos/hello"
 }
-
 
 variable "deployment_container_name" {
   type    = string

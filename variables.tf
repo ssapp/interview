@@ -19,12 +19,12 @@ variable "location" {
   default = "westus2"
 }
 
-variable "k8s_name" {
+variable "kubernetes_cluster_name" {
   type    = string
   default = "aks-cluster"
 }
 
-variable "k8s_version" {
+variable "kubernetes_version" {
   type    = string
   default = "1.28.0"
 }

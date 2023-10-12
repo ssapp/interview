@@ -35,7 +35,7 @@ variable "chart_name" {
 
 variable "chart_version" {
   type    = string
-  default = "3.36.0"
+  default = "4.8.1"
 }
 
 variable "chart_repository" {
