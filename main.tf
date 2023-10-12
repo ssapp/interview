@@ -30,6 +30,21 @@ resource "azurerm_resource_group" "k8s" {
   tags     = local.resource_tags
 }
 
+resource "azurerm_virtual_network" "k8s" {
+  name                = var.vnet_name
+  address_space       = var.vnet_address_space
+  location            = azurerm_resource_group.k8s.location
+  resource_group_name = azurerm_resource_group.k8s.name
+  tags                = local.resource_tags
+}
+
+resource "azurerm_subnet" "k8s" {
+  name                 = var.subnet_name
+  address_prefixes     = var.subnet_address_prefixes
+  resource_group_name  = azurerm_resource_group.k8s.name
+  virtual_network_name = azurerm_virtual_network.k8s.name
+}
+
 resource "azurerm_kubernetes_cluster" "k8s" {
   dns_prefix          = var.dns_prefix
   location            = azurerm_resource_group.k8s.location
@@ -43,6 +58,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     node_count          = var.node_count
     vm_size             = var.vm_size
     enable_auto_scaling = false
+    vnet_subnet_id      = azurerm_subnet.k8s.id
     tags                = local.resource_tags
   }
 
@@ -54,13 +70,13 @@ resource "azurerm_kubernetes_cluster" "k8s" {
 
 
 # Public IP for Ingress Controller
-resource "azurerm_public_ip" "ingress_ip" {
+resource "azurerm_public_ip" "k8s" {
   name                = "ingress-ip"
   resource_group_name = azurerm_resource_group.k8s.name
   location            = azurerm_resource_group.k8s.location
   domain_name_label   = var.dns_prefix
-  allocation_method   = "Static"
   sku                 = "Standard"
+  allocation_method   = "Static"
   tags                = local.resource_tags
 }
 
@@ -86,8 +102,8 @@ module "ingress" {
   deployment_namespace             = "ingress-nginx"
   force_update                     = false
   create_namespace                 = true
-  public_ip_address_name           = azurerm_public_ip.ingress_ip.name
-  loadbalancer_ipv4_address        = azurerm_public_ip.ingress_ip.ip_address
+  public_ip_address_name           = azurerm_public_ip.k8s.name
+  loadbalancer_ipv4_address        = azurerm_public_ip.k8s.ip_address
   loadbalancer_dns_label_name      = var.dns_prefix
   loadbalancer_resource_group_name = var.rg_name
 }

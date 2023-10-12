@@ -4,5 +4,5 @@ output "kubeconfig" {
 }
 
 output "ingress_fqdn" {
-    value = azurerm_public_ip.ingress_ip.fqdn
+    value = azurerm_public_ip.k8s.fqdn
 }
