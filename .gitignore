@@ -5,6 +5,8 @@
 *.tfstate
 *.tfstate.*
 
+remote_state.tf
+
 # Crash log files
 crash.log
 

@@ -32,6 +32,36 @@ tenant_id       = "" # <tenant>
 subscription_id = "" # <subscription-id>
 ```
 
+## Remote State
+
+In order to setup a remote state storage to track the current state of the infrastructure that is being deployed and managed, i've used the `azurerm` backend [[docs]](https://developer.hashicorp.com/terraform/language/settings/backends/azurerm) like this:
+
+```shell
+# Set the variables
+$ LOCATION="<location>";RG_NAME="<name>";STORAGE_ACCOUNT="<name>";CONTAINER_NAME="<name>";
+
+# Create new resource group
+$ az group create --location "$LOCATION" --name "$RG_NAME"
+
+# Create new storage account
+$ az storage account create --name "$STORAGE_ACCOUNT" --resource-group "$RG_NAME" --location "$LOCATION" --sku Standard_LRS
+
+$ az storage container create --name "$CONTAINER_NAME" --account-name "$STORAGE_ACCOUNT"
+```
+
+Now `cp remote_state.tf.example remote_state.tf` and fill the details:
+
+```hcl
+terraform {
+    backend "azurerm" {
+    resource_group_name  = "" # The value of $RG_NAME
+    storage_account_name = "" # The value of $STORAGE_ACCOUNT
+    container_name       = "" # The value of $CONTAINER_NAME
+    key                  = "interview.terraform.tfstate" #  You can left this unchanged
+  }
+}
+```
+
 ## Terraform
 
 Initialize Terraform - `terraform init`
