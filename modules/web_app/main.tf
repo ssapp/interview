@@ -70,48 +70,63 @@ resource "kubernetes_deployment" "deployment" {
   }
 }
 
+locals {
+  name        = kubernetes_deployment.deployment.metadata.0.name
+  namespace   = kubernetes_deployment.deployment.metadata.0.namespace
+  labels      = kubernetes_deployment.deployment.metadata.0.labels
+  selector    = kubernetes_deployment.deployment.spec.0.selector.0.match_labels
+  port        = kubernetes_deployment.deployment.spec.0.template.0.spec.0.container.0.port.0.container_port
+  target_port = kubernetes_deployment.deployment.spec.0.template.0.spec.0.container.0.port.0.container_port
+}
+
 resource "kubernetes_service_v1" "service" {
   metadata {
-    name      = kubernetes_deployment.deployment.metadata.0.name
-    namespace = kubernetes_deployment.deployment.metadata.0.namespace
+    name      = local.name
+    namespace = local.namespace
   }
+
   spec {
-    selector = kubernetes_deployment.deployment.spec.0.template.0.metadata.0.labels
+    selector = local.selector
+
     port {
-      port        = kubernetes_deployment.deployment.spec.0.template.0.spec.0.container.0.port.0.container_port
-      target_port = kubernetes_deployment.deployment.spec.0.template.0.spec.0.container.0.port.0.container_port
+      port        = local.port
+      target_port = local.target_port
     }
+
     type = var.service_type
   }
-  depends_on = [ kubernetes_deployment.deployment ]
+
+  depends_on = [
+    kubernetes_deployment.deployment
+  ]
 }
 
 resource "kubernetes_ingress_v1" "ingress" {
   metadata {
-    name      = kubernetes_deployment.deployment.metadata.0.name
-    namespace = kubernetes_deployment.deployment.metadata.0.namespace
+    name      = local.name
+    namespace = local.namespace
   }
-
   spec {
-    ingress_class_name = var.ingress_class_name
-
     rule {
       http {
         path {
-          path_type = var.ingress_path_type
-          path      = var.ingress_path_prefix
-
           backend {
             service {
-              name = kubernetes_service_v1.service.metadata.0.name
+              name = local.name
               port {
-                number = kubernetes_service_v1.service.spec.0.port.0.port
+                number = local.port
               }
             }
           }
+          path_type = var.ingress_path_type
+          path      = var.ingress_path_prefix
         }
       }
     }
+    ingress_class_name = var.ingress_class_name
   }
-  depends_on = [ kubernetes_service_v1.service ]
+
+  depends_on = [
+    kubernetes_service_v1.service
+  ]
 }
