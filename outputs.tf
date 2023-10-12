@@ -1,4 +1,8 @@
 output "kubeconfig" {
-    value = azurerm_kubernetes_cluster.k8s.kube_config_raw
-    sensitive = true
+  value     = azurerm_kubernetes_cluster.k8s.kube_config_raw
+  sensitive = true
+}
+
+output "ingress_fqdn" {
+    value = azurerm_public_ip.ingress_ip.fqdn
 }
