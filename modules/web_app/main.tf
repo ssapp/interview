@@ -83,6 +83,7 @@ resource "kubernetes_service_v1" "service" {
     }
     type = var.service_type
   }
+  depends_on = [ kubernetes_deployment.deployment ]
 }
 
 resource "kubernetes_ingress_v1" "ingress" {
@@ -112,4 +113,5 @@ resource "kubernetes_ingress_v1" "ingress" {
       }
     }
   }
+  depends_on = [ kubernetes_service_v1.service ]
 }
