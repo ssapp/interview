@@ -105,3 +105,25 @@ web-app   nginx   *       20.98.96.68   80      8h
 ```
 
 You can see the fqdn for the ingress IP address with `terraform output ingress_fqdn`
+
+## Variables
+
+| Variable | Description |
+|----------|-------------|
+| `dns_prefix` | DNS prefix to be used for the Kubernetes cluster.|
+| `environment` | Environment in which the Kubernetes cluster is being deployed.|
+| `rg_name` | Name of the resource group in which the Kubernetes cluster is being deployed.|
+| `location` | Azure region in which the Kubernetes cluster is being deployed.|
+| `kubernetes_cluster_name` | Name of the Kubernetes cluster.|
+| `kubernetes_version` | Version of Kubernetes to be used for the Kubernetes cluster.|
+| `vm_size` | Size of the virtual machines to be used for the Kubernetes cluster nodes.|
+| `default_node_pool_name` | Name of the default node pool for the Kubernetes cluster.|
+| `vnet_name` | Name of the virtual network to be used for the Kubernetes cluster.|
+| `vnet_address_space` | Address space of the virtual network to be used for the Kubernetes cluster.|
+| `subnet_name` | Name of the subnet to be used for the Kubernetes cluster.|
+| `subnet_address_prefixes` | Address prefix of the subnet to be used for the Kubernetes cluster.|
+| `node_count` | An integer value that represents the number of nodes to be used for the Kubernetes cluster.|
+| `client_id` | Client ID of the service principal to be used for the Kubernetes cluster.|
+| `client_secret` | Client secret of the service principal to be used for the Kubernetes cluster.|
+| `tenant_id` | Tenant ID of the service principal to be used for the Kubernetes cluster.|
+| `subscription_id` | Subscription ID of the Azure subscription to be used for the Kubernetes cluster.|
