@@ -20,7 +20,7 @@ Create SP:
 }
 ```
 
-Copy example.tfvars and enter the details
+Copy `example.tfvars` and enter the details
 
  `cp example.tfvars terraform.tfvars`
 
