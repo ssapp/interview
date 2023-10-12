@@ -73,3 +73,5 @@ $ kubectl get ing -n software-ag
 NAME      CLASS   HOSTS   ADDRESS       PORTS   AGE
 web-app   nginx   *       20.98.96.68   80      8h
 ```
+
+You can see the fqdn for the ingress IP address with `terraform output ingress_fqdn`
